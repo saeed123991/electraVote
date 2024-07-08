@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>electraVote {% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    /* Custom CSS for 3D and animation effects */
+    .btn-3d {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border-radius: 20px;
+      background-color: deepskyblue;
+      color: white;
+      border: none;
+      font-size: 1.1rem;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    .btn-3d::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300%;
+      height: 300%;
+      background-color: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      transform: translate(-50%, -50%) rotate(45deg);
+      z-index: 0;
+      border-radius: 50%;
+    }
+    .btn-3d:hover::before {
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
+    .btn-3d span {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- NavBar -->
+  {% include 'partials/_navbar.html' %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 m-auto">
+        {% include 'partials/_messages.html' %}
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
