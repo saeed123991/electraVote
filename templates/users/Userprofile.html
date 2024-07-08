@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+  /* Custom CSS for profile page */
+  .content-section {
+    background-color: #101820; /* Dark background color */
+    color: #FEE715; /* Bright accent color */
+    padding: 50px; /* Padding all around */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    margin-top: 0; /* Top margin */
+  }
+
+  .media {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px; /* Spacing between media and form */
+  }
+
+  .account-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%; /* Round image */
+    border: 5px solid #FEE715; /* Red border */
+  }
+
+  .media-body {
+    margin-left: 20px; /* Spacing between image and text */
+  }
+
+  .account-heading {
+    font-size: 2.5rem; /* Larger font size for username */
+    margin-top: 20px;
+  }
+
+  .text-secondary {
+    color: #FF6347; /* Red text color */
+    font-size: 1.2rem; /* Smaller font size for secondary text */
+  }
+
+  .form-group {
+    margin-bottom: 20px; /* Bottom margin for form groups */
+  }
+
+  .btn {
+    border-radius: 15px; /* Rounded corners for buttons */
+    padding: 10px 20px; /* Padding inside buttons */
+    font-size: 1.2rem; /* Font size for button text */
+    width: 100%; /* Full width button */
+  }
+
+  .btn-success {
+    background-color: #FEE715; /* Green button background */
+    color: black;
+    font-weight: bold;
+    border-color: #FEE715; /* Green button border color */
+  }
+
+  .btn-success:hover {
+    background-color: #45a049; /* Darker green on hover */
+    border-color: #45a049; /* Darker green border on hover */
+  }
+</style>
+
+<div class="content-section">
+  <div class="media">
+    <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+    <div class="media-body">
+      <h2 class="account-heading">{{ user.username }}</h2>
+      <p class="text-secondary">{{ user.email }}</p>
+    </div>
+  </div>
+
+  <!-- Don't Forget To Add enctype="multipart/form-data". If We Leave This, Then It Won't Save Data In The Background -->
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset class="form-group border rounded p-4">
+      <legend class="border-bottom mb-4">Profile Info</legend>
+      {{ u_form | crispy }}
+      {{ p_form | crispy }}
+    </fieldset>
+    <div class="form-group">
+      <button class="btn btn-success" type="submit">Update</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  /* Custom CSS for poll questions */
+  .vote-container {
+    background-color: #101820; /* Dark background color */
+    color: #FEE715; /* Bright accent color */
+    padding: 50px 0; /* Vertical padding */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    overflow-x: hidden; /* Hide horizontal overflow */
+    border-radius: 20px; /* Rounded corners */
+    margin: 0;
+  }
+  .vote-inner {
+    max-width: 1000px; /* Increased maximum width for content */
+    margin: 0 auto; /* Center the content horizontally */
+    padding: 0 20px; /* Horizontal padding */
+  }
+  .vote-inner h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .vote-inner .card {
+    background-color: #1F2C3B; /* Slightly lighter background for cards */
+    border: none;
+    margin-bottom: 20px;
+    border-radius: 10px; /* Rounded corners for cards */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  .vote-inner .card-body {
+    padding: 20px;
+  }
+  .vote-inner .lead {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  .vote-inner .btn-sm {
+    font-size: 1rem;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+  }
+  .vote-inner .btn-sm i {
+    margin-right: 5px;
+  }
+</style>
+
+<div class="vote-container">
+  <div class="vote-inner">
+    <h1>electraVote | Your On The Go Voting Platform</h1>
+    {% if current_questions %}
+      {% for question in current_questions %}
+        <div class="card">
+          <div class="card-body">
+            <p class="lead">{{ question.question_text }}</p>
+            <a href="{% url 'polls:detail' question.id %}" class="btn btn-warning btn-sm">
+              <i class="fas fa-poll-h"></i> Vote Now
+            </a>
+            <a href="{% url 'polls:results' question.id %}" class="btn btn-danger btn-sm">
+              <i class="fas fa-chart-pie"></i> Results
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="lead text-center">No Data Available, Please Come Back Later!</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

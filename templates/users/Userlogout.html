@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+  /* Custom CSS for logout page */
+  .logout-container {
+    background-color: #101820; /* Dark background color */
+    color: #FEE715; /* Bright accent color */
+    padding: 50px; /* Padding all around */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    margin-top: 30px; /* Top margin */
+    max-width: 400px; /* Limit width for better readability */
+    margin: 0 auto; /* Center the container horizontally */
+    text-align: center; /* Center text horizontally */
+  }
+
+  .text-muted a {
+    color: #FF6347; /* Red link color */
+    font-weight: bold; /* Bold font for link */
+  }
+
+  .text-muted a:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  #btn-signOUT{
+   color: white;
+ }
+</style>
+
+<div class="logout-container">
+  <h2>You have been logged out from electraVote</h2>
+  <div class="border-top pt-3">
+    <small class="text-muted">
+      <a href="{% url 'login' %}" id="btn-signOUT">Sign In Again</a>
+    </small>
+  </div>
+</div>
+
+{% endblock %}

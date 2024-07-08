@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+  /* Custom CSS for poll results */
+  .poll-results-container {
+    background-color: #101820; /* Dark background color */
+    color: #FEE715; /* Bright accent color */
+    padding: 40px 0; /* Vertical padding */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    overflow-x: hidden; /* Hide horizontal overflow */
+    border-radius: 20px; /* Rounded corners */
+    margin: 0;
+  }
+  .poll-results-inner {
+    max-width: 1200px; /* Increased maximum width for content */
+    margin: 0 auto; /* Center the content horizontally */
+    padding: 0 20px; /* Horizontal padding */
+  }
+  .poll-results-inner h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .poll-results-inner .list-group-item {
+    background-color: #1F2C3B; /* Slightly lighter background for list items */
+    color: #FEE715; /* Bright accent color for text */
+    border: none;
+    border-radius: 10px; /* Rounded corners for list items */
+    margin-bottom: 10px;
+  }
+  .poll-results-inner .badge-primary {
+    background-color: #FF6347; /* Red badge background */
+    color: white; /* White badge text */
+  }
+  .poll-results-inner .btn {
+    margin: 10px; /* Spacing between buttons */
+    border-radius: 10px; /* Rounded corners for buttons */
+    padding: 10px 20px; /* Padding inside buttons */
+    font-size: 1rem; /* Font size for button text */
+  }
+  .charts-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 30px;
+  }
+  .chart-container {
+    height: 400px;
+    width: 32%; /* Each chart takes 32% width to fit three charts in a row */
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background for chart containers */
+    border-radius: 10px; /* Rounded corners for chart containers */
+    padding: 10px; /* Padding inside chart containers */
+  }
+  .chart-title {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  .button-container {
+    text-align: center;
+    margin-top: 100px;
+	margin-bottom: 50px;
+  }
+  .button-container .btn {
+    margin: 10px;
+    display: inline-block;
+    width: auto;
+  }
+  @media (max-width: 1200px) {
+    .chart-container {
+      width: 48%; /* Two charts per row on medium screens */
+    }
+  }
+  @media (max-width: 768px) {
+    .chart-container {
+      width: 100%; /* One chart per row on small screens */
+    }
+  }
+</style>
+
+<div class="poll-results-container">
+  <div class="poll-results-inner">
+    <h1>{{ question.question_text }}</h1>
+
+    <ul class="list-group mb-5">
+      {% for choice in question.choice_set.all %}
+      <li class="list-group-item">
+        {{ choice.choice_text }}
+        <span class="badge badge-primary float-right">{{ choice.votes }} vote{{ choice.votes | pluralize }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <h2 class="text-center mb-4">Visualization of Data</h2>
+
+    <div class="charts-row">
+      <div class="chart-container">
+        <div class="chart-title">Pie Chart</div>
+        <div id="pieChart"></div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">Line Chart</div>
+        <div id="lineChart"></div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">Scatter Plot</div>
+        <div id="scatterPlot"></div>
+      </div>
+    </div>
+
+    <div class="button-container">
+      <a class="btn btn-success" href="{% url 'polls:index' %}">Go Back</a>
+      <a class="btn btn-danger" href="{% url 'polls:detail' question.id %}">Again Vote</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  var state = {
+    'items': [],
+    'values': [],
+  }
+  var objId = "{{ question.id }}"
+  var dataURL = `/polls/resultsdata/${objId}/`
+
+  $.ajax({
+    method: "GET",
+    url: dataURL,
+    success: function(response) {
+      console.log('RESPONSE:', response)
+      for (var i in response) {
+        var key = Object.keys(response[i])[0]
+        var value = Object.values(response[i])[0]
+        state.items.push(key)
+        state.values.push(value)
+      }
+      console.log('STATE:', state)
+      buildCharts()
+    }
+  })
+
+  function buildCharts() {
+    var commonChartConfig = {
+      "background-color": "#101820", /* Chart background color */
+      "scale-x": {
+        "values": state.items,
+        "item": { /* Style for the x-axis labels */
+          "font-color": "#FEE715"
+        },
+        "line-color": "#FEE715"
+      },
+      "scale-y": {
+        "line-color": "#FEE715",
+        "item": { /* Style for the y-axis labels */
+          "font-color": "#FEE715"
+        }
+      }
+    };
+
+    var pieChartData = {
+      ...commonChartConfig,
+      "type": "pie",
+      "series": state.items.map((item, index) => ({
+        "text": item,
+        "values": [state.values[index]],
+        "background-color": "#FF6347" /* Slice color */
+      }))
+    };
+
+    var lineChartData = {
+      ...commonChartConfig,
+      "type": "line",
+      "series": [{
+        "values": state.values,
+        "line-color": "#FF6347", /* Line color */
+        "marker": {
+          "background-color": "#FF6347" /* Marker color */
+        }
+      }]
+    };
+
+    var scatterPlotData = {
+      ...commonChartConfig,
+      "type": "scatter",
+      "series": [{
+        "values": state.values.map((value, index) => [index, value]),
+        "marker": {
+          "background-color": "#FF6347" /* Marker color */
+        }
+      }]
+    };
+
+    zingchart.render({
+      id: 'pieChart',
+      data: pieChartData,
+    });
+
+    zingchart.render({
+      id: 'lineChart',
+      data: lineChartData,
+    });
+
+    zingchart.render({
+      id: 'scatterPlot',
+      data: scatterPlotData,
+    });
+  }
+</script>
+
+{% endblock %}

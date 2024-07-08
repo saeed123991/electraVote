@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Custom CSS for left-side navbar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px; /* Adjust width as needed */
+      background-color: #101820; /* Dark background color */
+      padding-top: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth effect */
+      z-index: 1000; /* Ensure navbar stays above other content */
+    }
+    .sidebar .navbar-brand {
+      color: #FEE715; /* Bright accent color */
+      font-size: 1.5rem;
+      font-weight: bold;
+      padding: 15px 20px;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+    .sidebar .nav-link {
+      color: #FEE715; /* Bright accent color */
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent; /* Initially transparent border for 3D effect */
+    }
+    .sidebar .nav-link:hover {
+      background-color: rgba(254, 231, 21, 0.2); /* Lighter background on hover */
+      text-decoration: none;
+      border-left-color: #FEE715; /* Accent color border on hover */
+    }
+    .sidebar .nav-link i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+    .content-wrapper {
+      margin-left: 250px; /* Should match sidebar width */
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+  </style>
+  
+  <!-- Font Awesome icons (you may need to include Font Awesome library if not already included) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+  <script>
+    function confirmLogout(event) {
+      if (!confirm('Are you sure you want to logout?')) {
+        event.preventDefault();
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="sidebar">
+    <a class="navbar-brand" href="/">electraVote</a>
+    <ul class="nav flex-column">
+      {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="/">
+          <i class="fas fa-home"></i> Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/profile">
+          <i class="fas fa-user-circle"></i> Profile
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout" onclick="confirmLogout(event)">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/login">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/register">
+          <i class="fas fa-user-plus"></i> Register
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  
+  <div class="content-wrapper">
+    <!-- Main content area -->
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

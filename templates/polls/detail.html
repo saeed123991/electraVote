@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  /* Custom CSS for poll voting form */
+  .poll-form-container {
+    background-color: #101820; /* Dark background color */
+    color: #FEE715; /* Bright accent color */
+    padding: 50px 0; /* Vertical padding */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    overflow-x: hidden; /* Hide horizontal overflow */
+    border-radius: 20px; /* Rounded corners */
+    margin: 0;
+  }
+  .poll-form-inner {
+    max-width: 600px; /* Maximum width for content */
+    margin: 0 auto; /* Center the content horizontally */
+    padding: 0 20px; /* Horizontal padding */
+  }
+  .poll-form-inner h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .poll-form-inner .alert-danger {
+    background-color: #FF6347; /* Darker red background for danger alerts */
+    color: white; /* White text for alerts */
+    border-radius: 5px; /* Rounded corners for alerts */
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  .poll-form-inner form {
+    margin-top: 20px;
+  }
+  .poll-form-inner .form-check {
+    margin-bottom: 10px;
+  }
+  .poll-form-inner .form-check-label {
+    margin-left: 10px;
+  }
+  .poll-form-inner .btn-outline-danger {
+    color: #FF6347; /* Red text color */
+    border-color: #FF6347; /* Red border color */
+  }
+  .poll-form-inner .btn-outline-danger:hover {
+    background-color: #FF6347; /* Red background on hover */
+    color: white; /* White text on hover */
+  }
+</style>
+
+<div class="poll-form-container">
+  <div class="poll-form-inner">
+    <a class="btn btn-outline-danger btn-sm mb-3" href="{% url 'polls:index' %}">Go Back</a>
+    <h1>{{ question.question_text }}</h1>
+
+    {% if error_message %}
+      <p class="alert alert-danger">
+        <strong>{{ error_message }}</strong>
+      </p>
+    {% endif %}
+
+    <form action="{% url 'polls:vote' question.id %}" method="post">
+      {% csrf_token %}
+      {% for choice in question.choice_set.all %}
+        <div class="form-check">
+          <input
+            type="radio"
+            name="choice"
+            class="form-check-input"
+            id="choice{{ forloop.counter }}"
+            value="{{ choice.id }}"
+          />
+          <label for="choice{{ forloop.counter }}" class="form-check-label">{{ choice.choice_text }}</label>
+        </div>
+      {% endfor %}
+      <input type="submit" value="Vote" class="btn btn-info btn-lg btn-block mt-4" />
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card text-center" style="background-color: #101820; color: #FEE715; border-radius: 20px;">
+    <div class="card-body">
+      <h1 class="display-4">Welcome To <span id="electraTextColor">electraVote</span></h1>
+      <p class="lead">A Semester Project Created by Saeed While Learning the Django Platform</p>
+      <a class="btn btn-success btn-lg rounded-pill btn-animate" href="{% url 'polls:index' %}">
+        <span>View Data to Vote</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Custom CSS for button animation */
+  .btn-animate {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-color: white; /* Button color matching the theme */
+    border: none;
+    color: #101820; /* Text color */
+  }
+
+  .btn-animate::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background-color: #FEE715;
+    transition: all 0.3s ease;
+    transform: translate(-50%, -50%) rotate(45deg);
+    z-index: 0;
+    border-radius: 50%;
+  }
+  #electraTextColor{
+    color: white;
+  }
+
+  .btn-animate:hover::before {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  .btn-animate span {
+    position: relative;
+    z-index: 1;
+  }
+
+  .card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .card h1 .text-primary {
+    color: #FEE715; /* Accent color for electraVote text */
+  }
+</style>
+{% endblock %}

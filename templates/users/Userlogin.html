@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+  /* Custom CSS for login form */
+  .content-section {
+    background-color: #101820; /* Dark background color */
+    color: #FEE715; /* Bright accent color */
+    padding: 50px; /* Padding all around */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    margin-top: 0; /* Top margin */
+    max-width: 400px; /* Limit width for better readability */
+    margin: 0 auto; /* Center the form horizontally */
+  }
+
+  .form-group {
+    margin-bottom: 20px; /* Bottom margin for form groups */
+  }
+
+  .btn {
+    border-radius: 15px; /* Rounded corners for buttons */
+    padding: 10px 20px; /* Padding inside buttons */
+    font-size: 1.2rem; /* Font size for button text */
+    width: 100%; /* Full width button */
+  }
+
+  .btn-success {
+    background-color: #FEE715; /* Green button background */
+    border-color: #FEE715; /* Green button border color */
+  }
+
+  .btn-success:hover {
+    background-color: #45a049; /* Darker green on hover */
+    border-color: #45a049; /* Darker green border on hover */
+    transform: translateY(-2px); /* Move button up slightly on hover for 3D effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slight shadow on hover for depth */
+  }
+
+  .legend-border {
+    border-bottom: 2px solid #FEE715; /* Yellow border bottom for legend */
+    margin-bottom: 15px; /* Bottom margin for legend */
+    padding-bottom: 10px; /* Padding bottom for legend */
+  }
+
+  .text-muted {
+    color: #FF6347; /* Red text color */
+    font-size: 0.9rem; /* Smaller font size for text */
+  }
+  #btn-singIN{
+    color: black;
+    font-weight: bold;
+  }
+</style>
+
+<div class="content-section">
+  <form action="" method="POST">
+    {% csrf_token %}
+    <fieldset class="form-group border rounded p-4">
+      <legend class="legend-border">Log In</legend>
+      {{ form | crispy }}
+    </fieldset>
+    <div class="form-group">
+      <button class="btn btn-success" id="btn-singIN" type="submit">Sign In</button>
+    </div>
+  </form>
+  <div class="border-top pt-3">
+    <small class="text-muted">
+      Need An Account? <a class="ml-2" href="{% url 'register' %}" style="color: white;">Sign Up Now</a>
+    </small>
+  </div>
+</div>
+
+{% endblock %}
